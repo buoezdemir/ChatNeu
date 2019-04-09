@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-//Kommentar
+//Kommenta
 public class Server {
 
 	public static void main(String[] args) {
