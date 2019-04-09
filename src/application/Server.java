@@ -1,4 +1,8 @@
 package application;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -7,38 +11,30 @@ import java.net.Socket;
 public class Server {
 
 	public static void main(String[] args) {
-		Server server = new Server(8000);
-	}
-
-	private int port;
-
-	public Server(int port) {
-		super();
-		this.port = port;
-	}
-public void startListening() {
-	new Thread(new Runnable() {
 		
-		@Override
-		public void run() {
 			try {
-			ServerSocket serverSocket = new ServerSocket(port);
-			Socket remoteClientSocket = serverSocket.accept();
+			ServerSocket serverSocket = new ServerSocket(1201);
+			Socket s = serverSocket.accept();
 			
-			Scanner scan = new Scanner(new Buffered Reader(new InputStreamReader(remoteClientSocket.getInputStream())))
-			if(s.hasNextLine()) {
-				System.out.println("Nachricht: "+ s.nextLine());
+			DataInputStream din = new DataInputStream(s.getInputStream());
+			DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			
+			String msgin="", msgout="";
+			
+			while(!msgin.equals("end")) {
+				msgin = din.readUTF();
+				System.out.println(msgin);
+				msgout = br.readLine();
+				dout.writeUTF(msgout);
+				dout.flush();
 			}
+			
 			s.close();
-			remoteClientSocket.close();
-			ServerSocket.close();
-			} catch(Exeption e) {
-				e.printStackTrace();
-			}
-			}
 
+			} catch(Exception e) {
+			
+			}
 		}
-	})
-	
-}
-}
+	}
