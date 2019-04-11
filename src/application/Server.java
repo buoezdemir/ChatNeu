@@ -2,7 +2,10 @@ package application;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -13,28 +16,32 @@ public class Server {
 	public static void main(String[] args) {
 		
 			try {
-			ServerSocket serverSocket = new ServerSocket(1201);
-			Socket s = serverSocket.accept();
+			ServerSocket server = new ServerSocket(5555);
+			System.out.println("Server wird gestartet");
+			Socket s = server.accept();
 			
-			DataInputStream din = new DataInputStream(s.getInputStream());
-			DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+			OutputStream out = s.getOutputStream();
+			PrintWriter writer = new PrintWriter(out);
 			
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			InputStream in = s.getInputStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			
-			String msgin="", msgout="";
-			
-			while(!msgin.equals("end")) {
-				msgin = din.readUTF();
-				System.out.println(msgin);
-				msgout = br.readLine();
-				dout.writeUTF(msgout);
-				dout.flush();
+			String string = null;
+			while((string = br.readLine()) != null)
+			{
+				writer.write(string + "\n");
+				writer.flush();
+				System.out.println("Empfangen von Client:" + string);
 			}
 			
-			s.close();
+			writer.close();
+			br.close();
+			
+			
+			
 
 			} catch(Exception e) {
-			
+				e.printStackTrace();
 			}
 		}
 	}

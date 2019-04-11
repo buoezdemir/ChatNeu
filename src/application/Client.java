@@ -3,25 +3,39 @@ package application;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class Client {
 	public static void main(String[] args) {
 		try {
-			Socket s = new Socket("127.0.0.1", 1201);
-			DataInputStream din = new DataInputStream(s.getInputStream());
-			DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+			Socket s = new Socket("localhost", 5555);
+			System.out.println("Client wird gestartet");
 			
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			String msgin="", msgout="";
-			while(!msgin.equals("ende")){
-				msgout = br.readLine();
-				dout.writeUTF(msgout);
-				msgin = din.readUTF();
-				System.out.println(msgin);
+			OutputStream out = s.getOutputStream();
+			PrintWriter writer = new PrintWriter(out);
+			InputStream in = s.getInputStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			
+			writer.write("Hallo\n");
+			writer.flush();
+			
+			String string = null;
+			while((string = br.readLine()) != null)
+			{
+				writer.write(string);
+				writer.flush();
+				System.out.println("Empfangen von Server:" + string);
 			}
-		}catch(Exception e){
+			
+			br.close();
+			writer.close();
+			
+			}
+		catch(Exception e){
 			
 		}
 		}
