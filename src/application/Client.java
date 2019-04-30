@@ -9,10 +9,19 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Client {
+public class Client implements Runnable {
+	
+	private static int  a;
+	
 	public static void main(String[] args) {
+		a=1;
+		
+		new Thread(new Client()).start();
+	}
+	
+	public void run() {
 		try {
-			Socket s = new Socket("localhost", 5555);
+			Socket s = new Socket("localhost", 5553);
 			System.out.println("Client wird gestartet");
 			
 			OutputStream out = s.getOutputStream();
@@ -20,7 +29,9 @@ public class Client {
 			InputStream in = s.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			
-			writer.write("Hallo\n");
+			
+			System.out.println("Eingabe:");
+			writer.write("Hallo vom " + a ". Client\n");
 			writer.flush();
 			
 			String string = null;
@@ -40,4 +51,7 @@ public class Client {
 			
 		}
 		}
+		
+	}
+		
 }
