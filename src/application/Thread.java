@@ -3,17 +3,19 @@ package application;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ExecutorService;
+import java.lang.*;
+
+
 
 public class Thread {
 	
-	
-	
-	static class Zaehlen implements Runnable{
+	static class Zaehlen implements Runnable {
 
 		@Override
 		public void run() {
+	
 			
-			for (int i = 0; i<20; i++)
+			for (int i = 0; i<10; i++)
 			{
 				System.out.println(java.lang.Thread.currentThread().getName() + " zählt: " + i);
 				try {
@@ -32,12 +34,12 @@ public class Thread {
 
 	public static void main (String[] args)
 	{
-		
-		
+		 
 		 System.out.println("--------START--------");
 		 
 		 ExecutorService executor = Executors.newFixedThreadPool(2);
 	
+		 
 		 java.lang.Thread t1 = new java.lang.Thread(new Zaehlen());
 		 java.lang.Thread t2 = new java.lang.Thread(new Zaehlen()); 
 		 

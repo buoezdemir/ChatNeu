@@ -2,6 +2,7 @@ package application;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -17,10 +18,11 @@ public class Server {
 
 
 	public static void main(String[] args) throws Exception {
-		ServerSocket server;
 		ExecutorService executor = Executors.newFixedThreadPool(30);
+		ServerSocket server;
+		
 		try {
-			server = new ServerSocket(5553);
+			server = new ServerSocket(5552);
 			System.out.println("Server wird gestartet");
 			
 			while(true)
@@ -31,12 +33,12 @@ public class Server {
 				executor.execute(new Handler(client));
 				//hallotest
 
-				} catch(Exception e) {
+				} catch(IOException e) {
 					e.printStackTrace();
 				}
 			}
-		}catch(Exception e) {
-				e.printStackTrace();
+		}catch(IOException e1) {
+				e1.printStackTrace();
 			}
 		
 		

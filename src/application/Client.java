@@ -1,45 +1,62 @@
 package application;
 
 import java.io.BufferedReader;
+import java.lang.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
-public class Client implements Runnable {
+import application.Thread.Zaehlen;
+
+public class Client implements Runnable  {
 	
 	private static int  a;
 	
-	public static void main(String[] args) {
-		a=1;
-		
-		new Thread(new Client()).start();
-	}
 	
+	public static void main(String[] args) {
+		
+		Scanner eingabe = new Scanner(System.in);
+		a=1;
+		 java.lang.Thread t1 = new java.lang.Thread(new Client());
+		 t1.start();
+		 
+		
+		//new Thread(new Client()).start();
+	
+	}
+	@Override
 	public void run() {
 		try {
-			Socket s = new Socket("localhost", 5553);
+			
+			Scanner eingabe = new Scanner(System.in);
+			Socket client = new Socket("localhost", 5552);
 			System.out.println("Client wird gestartet");
 			
-			OutputStream out = s.getOutputStream();
+			OutputStream out = client.getOutputStream();
 			PrintWriter writer = new PrintWriter(out);
-			InputStream in = s.getInputStream();
+			InputStream in = client.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			
 			
 			System.out.println("Eingabe:");
-			writer.write("Hallo vom " + a ". Client\n");
+			String anServer = eingabe.nextLine();
+			
+			writer.write(anServer + " von " + a +   " . Client\n");
+			//writer.write("Hallo vom " + a +". Client\n");
 			writer.flush();
+			a++;
 			
 			String string = null;
 			while((string = br.readLine()) != null)
 			{
-				writer.write(string);
-				writer.flush();
-				System.out.println("Empfangen von Server:" + string);
+				System.out.println("Empfangen von Server: " + string);
+				
 			}
 			
 			br.close();
@@ -47,11 +64,10 @@ public class Client implements Runnable {
 			
 			//test
 			}
-		catch(Exception e){
+		catch(IOException e){
 			
 		}
 		}
 		
 	}
 		
-}
